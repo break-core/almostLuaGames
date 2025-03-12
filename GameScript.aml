@@ -1,0 +1,140 @@
+--[[
+	flex your country
+	Game created by riall in an hour
+	Developed using powerlang
+]]
+
+-- Build a new board for the player
+function buildCountryBoard(player)
+	-- Country billboard initialization
+	local board = Instance.new("BillboardGui")
+	board.Size = UDim2.new(2, 0, 0.5, 0)
+	board.StudsOffset = Vector3.new(0, 2, 0)
+	board.Name = "CountryBoard"
+
+	local text = Instance.new("TextLabel")
+	text.BackgroundTransparency = 1
+	text.Size = UDim2.new(1, 0, 1, 0)
+	text.Font = "ArialBold"
+	text.TextScaled = true
+	text.TextColor3 = Color3.new(255, 255, 255)
+	text.TextStrokeColor3 = Color3.new(0, 0, 0)
+	text.TextStrokeTransparency = 0
+	text.Parent = board
+	
+	local playerLocale = player.LocaleId
+	
+	if playerLocale == "es-es" then
+		text.Text = "Spain"
+	elseif playerLocale == "fr-fr" then
+		text.Text = "France"
+	elseif playerLocale == "ja-jp" then
+		text.Text = "Japan"
+	elseif playerLocale == "vi-vn" then
+		text.Text = "Vietnam"
+	elseif playerLocale == "pl-pl" then
+		text.Text = "Poland"
+	elseif playerLocale == "it-it" then
+		text.Text = "Italy"
+	elseif playerLocale == "ko-kr" then
+		text.Text = "Korea"
+	elseif playerLocale == "th-th" then
+		text.Text = "Thailand"
+	elseif playerLocale == "zh-cn" then
+		text.Text = "China"
+	elseif playerLocale == "pt-br" then
+		text.Text = "Brazil"
+	elseif playerLocale == "zh-tw" then
+		text.Text = "Taiwan/HK"
+	elseif playerLocale == "id-id" then
+		text.Text = "Indonesia"
+	elseif playerLocale == "en-us" then
+		text.Text = "USA"
+	elseif playerLocale == "tr-tr" then
+		text.Text = "Turkey"
+	elseif playerLocale == "de-de" then
+		text.Text = "Germany"
+	elseif playerLocale == "ar-001" then
+		text.Text = "Arabic"
+	else
+		text.Text = "Unknown"
+	end
+	
+	board.Parent = player.Character.Head
+end
+
+-- Check when the character respawns and build them a new board
+function onPlayerRespawn(property, player)
+	if property == "Character" and player.Character ~= nil then
+		buildCountryBoard(player)
+	end
+end
+
+game.Players.PlayerAdded:Connect(function(newPlayer)
+	-- Init leaderstats
+	local stats = Instance.new("IntValue")
+	stats.Name = "leaderstats"
+
+	local country = Instance.new("StringValue")
+	country.Name = "Country"
+
+	country.Parent = stats
+
+	-- Nasty, but it works.
+	-- This makes sure that the character is loaded in properly.
+	while true do
+		if newPlayer.Character ~= nil then 
+			break 
+		end
+		wait(2)
+	end
+	
+	local playerLocale = newPlayer.LocaleId
+
+	if playerLocale == "es-es" then
+		country.Value = "Spain"
+	elseif playerLocale == "fr-fr" then
+		country.Value = "France"
+	elseif playerLocale == "ja-jp" then
+		country.Value = "Japan"
+	elseif playerLocale == "vi-vn" then
+		country.Value = "Vietnam"
+	elseif playerLocale == "pl-pl" then
+		country.Value = "Poland"
+	elseif playerLocale == "it-it" then
+		country.Value = "Italy"
+	elseif playerLocale == "ko-kr" then
+		country.Value = "Korea"
+	elseif playerLocale == "th-th" then
+		country.Value = "Thailand"
+	elseif playerLocale == "zh-cn" then
+		country.Value = "China"
+	elseif playerLocale == "pt-br" then
+		country.Value = "Brazil"
+	elseif playerLocale == "zh-tw" then
+		country.Value = "Taiwan/HK"
+	elseif playerLocale == "id-id" then
+		country.Value = "Indonesia"
+	elseif playerLocale == "en-us" then
+		country.Value = "USA"
+	elseif playerLocale == "tr-tr" then
+		country.Value = "Turkey"
+	elseif playerLocale == "de-de" then
+		country.Value = "Germany"
+	elseif playerLocale == "ar-001" then
+		country.Value = "Arabic"
+	else
+		country.Value = "Unknown"
+	end
+	
+	-- Give the player a country board
+	buildCountryBoard(newPlayer)
+	
+	-- Rebuild the country board when the player respawns
+	newPlayer.Changed:Connect(function(property)
+		onPlayerRespawn(property, newPlayer)
+	end)
+	
+	-- Parent stats to player
+	stats.Parent = newPlayer
+end)
